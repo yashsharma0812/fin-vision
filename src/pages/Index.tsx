@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   TrendingUp, 
   MessageSquare, 
@@ -9,17 +10,33 @@ import {
   Trophy, 
   Sparkles,
   BarChart3,
-  Target,
-  Zap
+  LogIn
 } from "lucide-react";
-import ExpenseTracker from "@/components/ExpenseTracker";
-import AIChat from "@/components/AIChat";
-import InvestmentLearning from "@/components/InvestmentLearning";
-import GamificationPanel from "@/components/GamificationPanel";
 import heroImage from "@/assets/hero-image.jpg";
 
 const Index = () => {
-  const [activeTab, setActiveTab] = useState("overview");
+  const navigate = useNavigate();
+  const [session, setSession] = useState<any>(null);
+
+  useEffect(() => {
+    // Check if user is logged in
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      if (session) {
+        navigate("/dashboard");
+      }
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session);
+      if (session) {
+        navigate("/dashboard");
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -48,18 +65,17 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   className="gradient-primary shadow-glow"
-                  onClick={() => setActiveTab("chat")}
+                  onClick={() => navigate("/auth")}
                 >
-                  <MessageSquare className="w-5 h-5 mr-2" />
-                  Chat with AI Mentor
+                  <LogIn className="w-5 h-5 mr-2" />
+                  Get Started Free
                 </Button>
                 <Button 
                   size="lg" 
                   variant="outline"
-                  onClick={() => setActiveTab("expenses")}
+                  onClick={() => navigate("/auth")}
                 >
-                  <BarChart3 className="w-5 h-5 mr-2" />
-                  Track Expenses
+                  Login
                 </Button>
               </div>
               
@@ -134,86 +150,26 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Main Dashboard */}
+      {/* CTA Section */}
       <section className="py-16">
-        <div className="container mx-auto px-4">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-            <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-4 h-auto p-1">
-              <TabsTrigger value="overview" className="flex flex-col gap-1 py-3">
-                <Target className="w-5 h-5" />
-                <span className="text-xs">Overview</span>
-              </TabsTrigger>
-              <TabsTrigger value="expenses" className="flex flex-col gap-1 py-3">
-                <PiggyBank className="w-5 h-5" />
-                <span className="text-xs">Expenses</span>
-              </TabsTrigger>
-              <TabsTrigger value="invest" className="flex flex-col gap-1 py-3">
-                <TrendingUp className="w-5 h-5" />
-                <span className="text-xs">Invest</span>
-              </TabsTrigger>
-              <TabsTrigger value="chat" className="flex flex-col gap-1 py-3">
-                <MessageSquare className="w-5 h-5" />
-                <span className="text-xs">AI Chat</span>
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="overview" className="space-y-8">
-              <div className="text-center space-y-4">
-                <h2 className="text-3xl font-bold">Your Financial Dashboard</h2>
-                <p className="text-muted-foreground max-w-2xl mx-auto">
-                  Get a complete view of your financial journey. Track expenses, learn about investments, 
-                  and chat with our AI mentor anytime.
-                </p>
-              </div>
-              <div className="grid lg:grid-cols-2 gap-6">
-                <GamificationPanel />
-                <Card className="p-6">
-                  <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                    <Zap className="w-5 h-5 text-accent" />
-                    Quick Actions
-                  </h3>
-                  <div className="space-y-3">
-                    <Button 
-                      variant="outline" 
-                      className="w-full justify-start"
-                      onClick={() => setActiveTab("expenses")}
-                    >
-                      <PiggyBank className="w-5 h-5 mr-2" />
-                      Log New Expense
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      className="w-full justify-start"
-                      onClick={() => setActiveTab("chat")}
-                    >
-                      <MessageSquare className="w-5 h-5 mr-2" />
-                      Ask AI About SIPs
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      className="w-full justify-start"
-                      onClick={() => setActiveTab("invest")}
-                    >
-                      <TrendingUp className="w-5 h-5 mr-2" />
-                      Explore Investments
-                    </Button>
-                  </div>
-                </Card>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="expenses">
-              <ExpenseTracker />
-            </TabsContent>
-
-            <TabsContent value="invest">
-              <InvestmentLearning />
-            </TabsContent>
-
-            <TabsContent value="chat">
-              <AIChat />
-            </TabsContent>
-          </Tabs>
+        <div className="container mx-auto px-4 text-center">
+          <Card className="p-12 gradient-hero text-white">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Ready to Master Your Finances?
+            </h2>
+            <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
+              Join thousands of students building better financial habits with FinVision
+            </p>
+            <Button 
+              size="lg" 
+              variant="secondary"
+              onClick={() => navigate("/auth")}
+              className="shadow-lg"
+            >
+              <LogIn className="w-5 h-5 mr-2" />
+              Create Free Account
+            </Button>
+          </Card>
         </div>
       </section>
     </div>
