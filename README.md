@@ -1,5 +1,5 @@
 # Welcome to FinVision
-fin-vision-mauve.vercel.app
+https://fin-vision-mauve.vercel.app/
 
 ## Project info
 
