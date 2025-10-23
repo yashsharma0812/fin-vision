@@ -1,10 +1,9 @@
 # Welcome to FinVision
-https://fin-vision-mauve.vercel.app/
+FinVision is an AI-powered financial mentor for young adults that tracks spending, analyzes budgets, and visualizes investments. It uses OCR to extract expenses, provides personalized SIP and mutual fund insights, and answers finance queries via an AI chatbot. Gamification encourages saving habits with points, leaderboards, and achievements. The platform combines Python, Flask, React, and cloud deployment for an interactive, student-friendly financial learning experience.
 
 ## Project info
 
-**URL**: fin-vision-8swyczqap-yash-sharmas-projects-a70f5977.vercel.app
-
+**URL**:https://fin-vision-mauve.vercel.app/
 ## How can I edit this code?
 
 There are several ways of editing your application.
