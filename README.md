@@ -1,8 +1,9 @@
 # Welcome to FinVision
+fin-vision-mauve.vercel.app
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/15025237-c9ae-4a1c-a479-7b9aa0daf777
+**URL**: fin-vision-8swyczqap-yash-sharmas-projects-a70f5977.vercel.app
 
 ## How can I edit this code?
 
